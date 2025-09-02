@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Distancia entre Aeropuertos</title>
+</head>
+<body>
+    <h1 class="text-title">Calculadora de distancia entre Aeropuertos</h1>
+
+    <div class="Container-form">
+    <form id="airportForm">
+        {% csrf_token %}
+
+        <label for="aeropuerto_origen">Aeropuerto Origen</label>
+        <input 
+        type="text"
+        id="aeropuerto_origen"
+        name="aeropuerto_origen"
+        placeholder="BOG"
+        maxlength="3"
+        required
+        >
+        <br><br>
+
+        <label for="aeropuerto_destino">Aeropuerto destino: </label>
+        <input
+            type="text"
+            id="aeropuerto_destino"
+            name="aeropuerto_destino"
+            placeholder="MEX"
+            maxlength="3"
+            required
+        >
+        <br><br>
+        <button type="submit">Calcular Distancia</button>
+    </form>
+    </div>
+
+    <div id="resultados" style="display: none;">
+        <h2>Resultados</h2>
+        <p><strong>Origen:</strong><span id="origen"></span></p>
+        <p><strong>Destino:</strong><span id="destino"></span></p>
+        <p><strong>Distancia:</strong><span id="distancia"></span>km</p>
+        <p><strong>Distancia Náutica</strong><span id="distancia_nm">NM </span></p>
+    </div>
+
+    <div id="error" style="display: none; color:red;" ></div>
+
+    <script>
+        document.getElementById('airportForm').addEventListener('submit', function(e){
+            e.preventDefault();
+
+            document.getElementById('resultados').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+
+            const formData = new FormData(this);
+
+            fetch('/calculate/', { 
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+                }
+
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success){
+                    document.getElementById('origen').textContent =
+                        `${data.aeropuerto_origen.codigo} - ${data.aeropuerto_origen.nombre} 
+                        (${data.aeropuerto_origen.ciudad}, ${data.aeropuerto_origen.pais})`;
+
+                    document.getElementById('destino').textContent =
+                        `${data.aeropuerto_destino.codigo} - ${data.aeropuerto_destino.nombre} 
+                        (${data.aeropuerto_destino.ciudad}, ${data.aeropuerto_destino.pais})`;
+
+                    document.getElementById('distancia').textContent = data.distancia_km;
+                    document.getElementById('resultados').style.display = 'block';
+
+                    const millasNauticas = (data.distancia_km * 0.53996).toFixed(2);
+                    document.getElementById('distancia_nm').textContent = millasNauticas;
+
+                } else {
+                    document.getElementById('error').textContent = data.error;
+                    document.getElementById('error').style.display = 'block';
+                }
+            })
+            .catch(error =>{
+                document.getElementById('error').textContent = 'Error de conexión';
+                document.getElementById('error').style.display = 'block';
+            });
+        });
+    </script>
+</body>
