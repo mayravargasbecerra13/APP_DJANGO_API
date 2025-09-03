@@ -5,6 +5,134 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Distancia entre Aeropuertos</title>
+<style>
+    body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    h1 {
+        margin-top: 30px;
+        color: #fff;
+        text-shadow: 1px 1px 5px rgba(0,0,0,0.4);
+    }
+
+    .Container-form {
+        background: #fff;
+        padding: 25px 30px;
+        margin-top: 20px;
+        border-radius: 15px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+        width: 100%;
+        max-width: 420px;
+        transition: transform 0.3s ease;
+    }
+
+    .Container-form:hover {
+        transform: scale(1.02);
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        margin-top: 12px;
+        color: #333;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-top: 6px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        outline: none;
+        transition: 0.3s;
+    }
+
+    input[type="text"]:focus {
+        border-color: #66a6ff;
+        box-shadow: 0 0 6px rgba(102,166,255,0.6);
+    }
+
+    button {
+        margin-top: 18px;
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: #fff;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        background: linear-gradient(135deg, #5a67d8, #6b46c1);
+        transform: scale(1.05);
+    }
+
+    #resultados {
+        background: #fff;
+        margin-top: 25px;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+        max-width: 420px;
+        width: 100%;
+        animation: fadeIn 0.6s ease-in-out;
+    }
+
+    #resultados h2 {
+        color: #333;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    /* Cada bloque de resultados */
+    .resultado-box {
+        background: #f7faff;
+        padding: 12px 15px;
+        margin-bottom: 12px;
+        border-radius: 10px;
+        border-left: 5px solid #667eea;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .resultado-box:hover {
+        transform: translateY(-3px);
+    }
+
+    .resultado-box strong {
+        color: #333;
+    }
+
+    #error {
+        margin-top: 20px;
+        padding: 14px;
+        background: #ffe0e0;
+        color: #a94442;
+        border: 1px solid #a94442;
+        border-radius: 10px;
+        max-width: 420px;
+        text-align: center;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    /* Animación */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
 </head>
 <body>
     <h1 class="text-title">Calculadora de distancia entre Aeropuertos</h1>
@@ -39,13 +167,12 @@
     </div>
 
     <div id="resultados" style="display: none;">
-        <h2>Resultados</h2>
-        <p><strong>Origen:</strong><span id="origen"></span></p>
-        <p><strong>Destino:</strong><span id="destino"></span></p>
-        <p><strong>Distancia:</strong><span id="distancia"></span>km</p>
-        <p><strong>Distancia Náutica</strong><span id="distancia_nm">NM </span></p>
-    </div>
-
+    <h2>Resultados</h2>
+    <div class="resultado-box"><strong>Origen:</strong> <span id="origen"></span></div>
+    <div class="resultado-box"><strong>Destino:</strong> <span id="destino"></span></div>
+    <div class="resultado-box"><strong>Distancia:</strong> <span id="distancia"></span> km</div>
+    <div class="resultado-box"><strong>Distancia Náutica:</strong> <span id="distancia_nm"></span> NM</div>
+</div>
     <div id="error" style="display: none; color:red;" ></div>
 
     <script>
